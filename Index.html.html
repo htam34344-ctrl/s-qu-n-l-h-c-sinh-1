@@ -1,0 +1,2047 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sổ Điểm Điện Tử & Quản Lý Học Sinh - Trường THCS Chân Trời Mới</title>
+    <!-- Google Fonts Inter -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    
+    <style>
+        :root {
+            --primary-900: #0f172a;
+            --primary-800: #1e1b4b;
+            --primary-700: #312e81;
+            --brand-600: #4f46e5;
+            --brand-500: #6366f1;
+            --brand-400: #818cf8;
+            --brand-100: #e0e7ff;
+            --brand-50: #eef2ff;
+            
+            --success-600: #16a34a;
+            --success-500: #22c55e;
+            --success-100: #dcfce7;
+            --warning-600: #d97706;
+            --warning-500: #f59e0b;
+            --warning-100: #fef3c7;
+            --danger-600: #dc2626;
+            --danger-500: #ef4444;
+            --danger-100: #fee2e2;
+
+            --bg-main: #f8fafc;
+            --bg-card: #ffffff;
+            --border-color: #e2e8f0;
+            --text-main: #0f172a;
+            --text-muted: #64748b;
+            
+            --sidebar-width: 270px;
+            --header-height: 70px;
+            --radius-lg: 16px;
+            --radius-md: 10px;
+            --radius-sm: 6px;
+            --shadow-sm: 0 1px 3px rgba(0,0,0,0.05);
+            --shadow-md: 0 4px 12px -2px rgba(0, 0, 0, 0.08);
+            --shadow-lg: 0 12px 24px -4px rgba(0,0,0,0.12);
+            --transition-fast: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Inter', system-ui, -apple-system, sans-serif;
+            -webkit-font-smoothing: antialiased;
+        }
+
+        body {
+            background-color: var(--bg-main);
+            color: var(--text-main);
+            display: flex;
+            height: 100vh;
+            overflow: hidden;
+        }
+
+        /* Custom Scrollbar */
+        ::-webkit-scrollbar {
+            width: 6px;
+            height: 6px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #f1f5f9;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #cbd5e1;
+            border-radius: 4px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #94a3b8;
+        }
+
+        .sidebar {
+            width: var(--sidebar-width);
+            background: linear-gradient(180deg, var(--primary-900) 0%, var(--primary-800) 100%);
+            color: #ffffff;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            transition: var(--transition-fast);
+            z-index: 100;
+            box-shadow: 4px 0 15px rgba(0,0,0,0.08);
+        }
+
+        .sidebar-brand {
+            height: var(--header-height);
+            display: flex;
+            align-items: center;
+            padding: 0 20px;
+            gap: 12px;
+            border-bottom: 1px solid rgba(255,255,255,0.08);
+        }
+
+        .sidebar-brand-icon {
+            width: 42px;
+            height: 42px;
+            background: linear-gradient(135deg, var(--brand-500), var(--brand-600));
+            border-radius: var(--radius-md);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 4px 12px rgba(99, 102, 241, 0.4);
+            flex-shrink: 0;
+        }
+
+        .sidebar-brand-title h2 {
+            font-size: 14px;
+            font-weight: 800;
+            letter-spacing: -0.2px;
+            color: #ffffff;
+            line-height: 1.2;
+            text-transform: uppercase;
+        }
+
+        .sidebar-brand-title p {
+            font-size: 11px;
+            color: #a5b4fc;
+            margin-top: 2px;
+        }
+
+        .sidebar-menu {
+            list-style: none;
+            padding: 16px 12px;
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+            flex-grow: 1;
+            overflow-y: auto;
+        }
+
+        .menu-item {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 12px 16px;
+            color: #94a3b8;
+            border-radius: var(--radius-md);
+            cursor: pointer;
+            font-size: 13.5px;
+            font-weight: 500;
+            transition: var(--transition-fast);
+            text-decoration: none;
+        }
+
+        .menu-item:hover {
+            color: #ffffff;
+            background-color: rgba(255,255,255,0.08);
+        }
+
+        .menu-item.active {
+            color: #ffffff;
+            background: linear-gradient(90deg, var(--brand-600), var(--brand-500));
+            box-shadow: 0 4px 12px rgba(79, 70, 229, 0.35);
+            font-weight: 600;
+        }
+
+        .menu-item svg {
+            width: 20px;
+            height: 20px;
+            stroke-width: 2;
+        }
+
+        .sidebar-footer {
+            padding: 16px 20px;
+            border-top: 1px solid rgba(255,255,255,0.08);
+            background: rgba(0,0,0,0.2);
+        }
+
+        .teacher-info {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .teacher-avatar {
+            width: 38px;
+            height: 38px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #818cf8, #4f46e5);
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            font-size: 13px;
+            border: 2px solid rgba(255,255,255,0.2);
+            flex-shrink: 0;
+        }
+
+        .teacher-details h4 {
+            font-size: 13px;
+            font-weight: 600;
+            color: #ffffff;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            max-width: 160px;
+        }
+
+        .teacher-details p {
+            font-size: 11px;
+            color: #a5b4fc;
+        }
+
+        .main-wrapper {
+            flex-grow: 1;
+            display: flex;
+            flex-direction: column;
+            height: 100vh;
+            overflow: hidden;
+            background-color: var(--bg-main);
+        }
+
+        .top-header {
+            height: var(--header-height);
+            background-color: var(--bg-card);
+            border-bottom: 1px solid var(--border-color);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 32px;
+            z-index: 10;
+        }
+
+        .header-title h1 {
+            font-size: 19px;
+            font-weight: 700;
+            color: var(--text-main);
+        }
+
+        .header-title p {
+            font-size: 12px;
+            color: var(--text-muted);
+        }
+
+        .header-actions {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .school-badge {
+            background-color: var(--brand-50);
+            color: var(--brand-600);
+            border: 1px solid var(--brand-100);
+            padding: 6px 14px;
+            border-radius: 30px;
+            font-size: 12.5px;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        /* Content Area */
+        .content-body {
+            flex-grow: 1;
+            padding: 24px 32px;
+            overflow-y: auto;
+        }
+
+        .page-section {
+            display: none;
+            animation: fadeIn 0.25s ease-in-out forwards;
+        }
+
+        .page-section.active {
+            display: block;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(5px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            gap: 18px;
+            margin-bottom: 24px;
+        }
+
+        .stat-card {
+            background-color: var(--bg-card);
+            border-radius: var(--radius-lg);
+            padding: 20px;
+            border: 1px solid var(--border-color);
+            box-shadow: var(--shadow-sm);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            transition: var(--transition-fast);
+        }
+
+        .stat-card:hover {
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-md);
+        }
+
+        .stat-info p {
+            font-size: 11.5px;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            color: var(--text-muted);
+            margin-bottom: 4px;
+        }
+
+        .stat-info h3 {
+            font-size: 24px;
+            font-weight: 800;
+            color: var(--text-main);
+        }
+
+        .stat-icon {
+            width: 48px;
+            height: 48px;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .stat-icon.blue { background-color: var(--brand-50); color: var(--brand-600); }
+        .stat-icon.green { background-color: var(--success-100); color: var(--success-600); }
+        .stat-icon.warning { background-color: var(--warning-100); color: var(--warning-600); }
+        .stat-icon.danger { background-color: var(--danger-100); color: var(--danger-600); }
+
+        .dashboard-grid {
+            display: grid;
+            grid-template-columns: 2fr 1fr;
+            gap: 20px;
+        }
+
+        @media (max-width: 1024px) {
+            .dashboard-grid { grid-template-columns: 1fr; }
+        }
+
+        .card {
+            background-color: var(--bg-card);
+            border-radius: var(--radius-lg);
+            border: 1px solid var(--border-color);
+            box-shadow: var(--shadow-sm);
+            padding: 22px;
+            margin-bottom: 20px;
+        }
+
+        .card-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 18px;
+        }
+
+        .card-title {
+            font-size: 15px;
+            font-weight: 700;
+            color: var(--text-main);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .table-toolbar {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 12px;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 16px;
+            background-color: var(--bg-card);
+            padding: 14px 18px;
+            border-radius: var(--radius-lg);
+            border: 1px solid var(--border-color);
+        }
+
+        .toolbar-left, .toolbar-right {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+
+        .search-box {
+            position: relative;
+            min-width: 250px;
+        }
+
+        .search-box input {
+            width: 100%;
+            padding: 8px 12px 8px 36px;
+            border: 1px solid var(--border-color);
+            border-radius: var(--radius-md);
+            font-size: 13px;
+            outline: none;
+            transition: var(--transition-fast);
+        }
+
+        .search-box input:focus {
+            border-color: var(--brand-500);
+            box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.15);
+        }
+
+        .search-box svg {
+            position: absolute;
+            left: 10px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--text-muted);
+            width: 16px;
+            height: 16px;
+        }
+
+        .filter-select {
+            padding: 8px 12px;
+            border: 1px solid var(--border-color);
+            border-radius: var(--radius-md);
+            font-size: 13px;
+            color: var(--text-main);
+            outline: none;
+            background-color: #ffffff;
+            cursor: pointer;
+        }
+
+        .filter-select:focus {
+            border-color: var(--brand-500);
+        }
+
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            padding: 8px 14px;
+            border-radius: var(--radius-md);
+            font-size: 13px;
+            font-weight: 600;
+            cursor: pointer;
+            border: 1px solid transparent;
+            transition: var(--transition-fast);
+            text-decoration: none;
+        }
+
+        .btn-primary { background-color: var(--brand-600); color: #ffffff; }
+        .btn-primary:hover { background-color: var(--brand-500); box-shadow: 0 4px 10px rgba(79, 70, 229, 0.25); }
+
+        .btn-secondary { background-color: #ffffff; border-color: var(--border-color); color: var(--text-main); }
+        .btn-secondary:hover { background-color: #f8fafc; border-color: #cbd5e1; }
+
+        .btn-success { background-color: var(--success-600); color: #ffffff; }
+        .btn-success:hover { background-color: var(--success-500); }
+
+        .btn-warning { background-color: var(--warning-600); color: #ffffff; }
+        .btn-warning:hover { background-color: var(--warning-500); }
+
+        .btn-danger { background-color: var(--danger-600); color: #ffffff; }
+        .btn-danger:hover { background-color: var(--danger-500); }
+
+        /* Data Table Styling */
+        .table-responsive {
+            width: 100%;
+            overflow-x: auto;
+            border-radius: var(--radius-lg);
+            border: 1px solid var(--border-color);
+            background-color: var(--bg-card);
+        }
+
+        .data-table {
+            width: 100%;
+            border-collapse: collapse;
+            text-align: left;
+            font-size: 13px;
+        }
+
+        .data-table th {
+            background-color: #f8fafc;
+            padding: 12px 14px;
+            font-weight: 600;
+            color: var(--text-muted);
+            border-bottom: 1px solid var(--border-color);
+            white-space: nowrap;
+            user-select: none;
+        }
+
+        .data-table th.sortable { cursor: pointer; }
+        .data-table th.sortable:hover { color: var(--brand-600); background-color: #f1f5f9; }
+
+        .data-table td {
+            padding: 11px 14px;
+            border-bottom: 1px solid var(--border-color);
+            color: var(--text-main);
+            vertical-align: middle;
+            white-space: nowrap;
+        }
+
+        .data-table tbody tr:hover { background-color: #f8fafc; }
+
+        /* Badges */
+        .badge {
+            display: inline-flex;
+            align-items: center;
+            padding: 4px 10px;
+            border-radius: 20px;
+            font-size: 11px;
+            font-weight: 700;
+            letter-spacing: 0.2px;
+        }
+
+        .badge-tot { background-color: #dcfce7; color: #15803d; }
+        .badge-kha { background-color: #dbeafe; color: #1d4ed8; }
+        .badge-tb { background-color: #fef3c7; color: #b45309; }
+        .badge-yeu { background-color: #fee2e2; color: #b91c1c; }
+
+        .badge-safe { background-color: #dcfce7; color: #15803d; }
+        .badge-notice { background-color: #fef3c7; color: #b45309; }
+        .badge-warn { background-color: #ffedd5; color: #c2410c; }
+        .badge-banned { background-color: #fee2e2; color: #b91c1c; }
+
+        .score-box {
+            font-weight: 700;
+            padding: 3px 8px;
+            border-radius: var(--radius-sm);
+            display: inline-block;
+            min-width: 38px;
+            text-align: center;
+        }
+
+        .score-good { background-color: #f0fdf4; color: #166534; border: 1px solid #bbf7d0; }
+        .score-avg { background-color: #fffbeb; color: #92400e; border: 1px solid #fde68a; }
+        .score-bad { background-color: #fef2f2; color: #991b1b; border: 1px solid #fecaca; }
+
+        .action-btns {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .btn-icon {
+            width: 30px;
+            height: 30px;
+            border-radius: var(--radius-sm);
+            border: 1px solid var(--border-color);
+            background: #ffffff;
+            color: var(--text-muted);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: var(--transition-fast);
+        }
+
+        .btn-icon:hover {
+            color: var(--brand-600);
+            border-color: var(--brand-500);
+            background-color: var(--brand-50);
+        }
+
+        .btn-icon.delete:hover {
+            color: var(--danger-600);
+            border-color: var(--danger-500);
+            background-color: var(--danger-100);
+        }
+
+        /* Inline Grade Table Inputs */
+        .grade-input {
+            width: 60px;
+            padding: 5px 6px;
+            text-align: center;
+            border: 1px solid var(--border-color);
+            border-radius: var(--radius-sm);
+            font-size: 13px;
+            font-weight: 600;
+            outline: none;
+            transition: var(--transition-fast);
+        }
+
+        .grade-input:focus {
+            border-color: var(--brand-500);
+            background-color: #eff6ff;
+            box-shadow: 0 0 0 2px rgba(99, 102, 241, 0.2);
+        }
+
+        .modal-overlay {
+            position: fixed;
+            inset: 0;
+            background-color: rgba(15, 23, 42, 0.5);
+            backdrop-filter: blur(4px);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 1000;
+            opacity: 0;
+            visibility: hidden;
+            transition: var(--transition-fast);
+        }
+
+        .modal-overlay.active {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        .modal-container {
+            background-color: var(--bg-card);
+            border-radius: var(--radius-lg);
+            width: 100%;
+            max-width: 620px;
+            max-height: 90vh;
+            overflow-y: auto;
+            box-shadow: var(--shadow-lg);
+            transform: scale(0.95);
+            transition: var(--transition-fast);
+        }
+
+        .modal-overlay.active .modal-container { transform: scale(1); }
+
+        .modal-header {
+            padding: 18px 24px;
+            border-bottom: 1px solid var(--border-color);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .modal-header h3 {
+            font-size: 16px;
+            font-weight: 700;
+            color: var(--text-main);
+        }
+
+        .modal-close {
+            background: none;
+            border: none;
+            font-size: 20px;
+            color: var(--text-muted);
+            cursor: pointer;
+        }
+
+        .modal-body { padding: 22px; }
+
+        .form-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 14px;
+        }
+
+        .form-group {
+            display: flex;
+            flex-direction: column;
+            gap: 5px;
+            margin-bottom: 14px;
+        }
+
+        .form-group.full { grid-column: span 2; }
+
+        .form-group label {
+            font-size: 12px;
+            font-weight: 600;
+            color: var(--text-main);
+        }
+
+        .form-control {
+            padding: 9px 12px;
+            border: 1px solid var(--border-color);
+            border-radius: var(--radius-md);
+            font-size: 13px;
+            outline: none;
+            transition: var(--transition-fast);
+        }
+
+        .form-control:focus {
+            border-color: var(--brand-500);
+            box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.15);
+        }
+
+        .modal-footer {
+            padding: 14px 24px;
+            border-top: 1px solid var(--border-color);
+            display: flex;
+            justify-content: flex-end;
+            gap: 10px;
+            background-color: #f8fafc;
+        }
+
+        /* Toast Notifications */
+        .toast-container {
+            position: fixed;
+            bottom: 24px;
+            right: 24px;
+            z-index: 2000;
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        .toast {
+            background-color: var(--primary-900);
+            color: #ffffff;
+            padding: 12px 18px;
+            border-radius: var(--radius-md);
+            font-size: 13px;
+            font-weight: 500;
+            box-shadow: var(--shadow-lg);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            animation: slideInRight 0.3s forwards;
+            border-left: 4px solid var(--brand-500);
+        }
+
+        @keyframes slideInRight {
+            from { transform: translateX(100%); opacity: 0; }
+            to { transform: translateX(0); opacity: 1; }
+        }
+
+        /* Print Media Styles */
+        @media print {
+            .sidebar, .top-header, .table-toolbar, .action-btns, .btn, .no-print {
+                display: none !important;
+            }
+            body {
+                background: #ffffff;
+                color: #000000;
+            }
+            .main-wrapper {
+                height: auto;
+                overflow: visible;
+            }
+            .content-body { padding: 0; }
+            .card, .table-responsive {
+                border: none;
+                box-shadow: none;
+            }
+            .data-table th, .data-table td {
+                border: 1px solid #000000 !important;
+                padding: 6px 8px;
+            }
+            .print-only-header {
+                display: block !important;
+                text-align: center;
+                margin-bottom: 20px;
+            }
+        }
+
+        .print-only-header { display: none; }
+    </style>
+</head>
+<body>
+
+    <aside class="sidebar">
+        <div>
+            <div class="sidebar-brand">
+                <div class="sidebar-brand-icon">
+                    <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.2">
+                        <path d="M22 10v6M2 10l10-5 10 5-10 5z"/>
+                        <path d="M6 12v5c3 3 9 3 12 0v-5"/>
+                    </svg>
+                </div>
+                <div class="sidebar-brand-title">
+                    <h2 id="sb-school-name">THCS Chân Trời Mới</h2>
+                    <p>Sổ Điểm & Quản Lý Lớp Học</p>
+                </div>
+            </div>
+
+            <ul class="sidebar-menu">
+                <li class="menu-item active" data-target="dashboard">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><rect x="3" y="3" width="7" height="9" rx="1"/><rect x="14" y="3" width="7" height="5" rx="1"/><rect x="14" y="12" width="7" height="9" rx="1"/><rect x="3" y="16" width="7" height="5" rx="1"/></svg>
+                    <span>Tổng quan</span>
+                </li>
+                <li class="menu-item" data-target="students">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+                    <span>Danh sách Học sinh</span>
+                </li>
+                <li class="menu-item" data-target="grades">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><polyline points="10 9 9 9 8 9"/></svg>
+                    <span>Nhập Điểm & Hạnh Kiểm</span>
+                </li>
+                <li class="menu-item" data-target="attendance">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/><path d="m9 16 2 2 4-4"/></svg>
+                    <span>Điểm danh & Nghỉ học</span>
+                </li>
+                <li class="menu-item" data-target="reports">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg>
+                    <span>Báo cáo & Thống kê</span>
+                </li>
+                <li class="menu-item" data-target="settings">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
+                    <span>Cài đặt Lớp học</span>
+                </li>
+            </ul>
+        </div>
+
+        <div class="sidebar-footer">
+            <div class="teacher-info">
+                <div class="teacher-avatar" id="sb-teacher-avatar">GV</div>
+                <div class="teacher-details">
+                    <h4 id="sb-teacher-name">ThS. Nguyễn Văn Minh</h4>
+                    <p id="sb-class-code">GVCN Lớp 8A1</p>
+                </div>
+            </div>
+        </div>
+    </aside>
+
+    <div class="main-wrapper">
+        <header class="top-header">
+            <div class="header-title">
+                <h1 id="page-title">Tổng quan Lớp học</h1>
+                <p id="page-subtitle">Hệ thống sổ điểm & theo dõi học sinh - Trường THCS Chân Trời Mới</p>
+            </div>
+
+            <div class="header-actions">
+                <div class="school-badge">
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/></svg>
+                    <span id="hdr-class-info">Lớp 8A1 (2026 - 2027)</span>
+                </div>
+            </div>
+        </header>
+
+        <main class="content-body">
+
+            <section id="dashboard" class="page-section active">
+                <div class="stats-grid">
+                    <div class="stat-card">
+                        <div class="stat-info">
+                            <p>Sĩ số lớp</p>
+                            <h3 id="stat-total-students">0</h3>
+                        </div>
+                        <div class="stat-icon blue">
+                            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/></svg>
+                        </div>
+                    </div>
+
+                    <div class="stat-card">
+                        <div class="stat-info">
+                            <p>ĐTB Cả Năm Lớp</p>
+                            <h3 id="stat-avg-score">0.0</h3>
+                        </div>
+                        <div class="stat-icon green">
+                            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>
+                        </div>
+                    </div>
+
+                    <div class="stat-card">
+                        <div class="stat-info">
+                            <p>Tỷ lệ HK Tốt/Khá</p>
+                            <h3 id="stat-good-conduct">0%</h3>
+                        </div>
+                        <div class="stat-icon warning">
+                            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="8" r="7"/><polyline points="8.21 13.89 7 23 12 20 17 23 15.79 13.88"/></svg>
+                        </div>
+                    </div>
+
+                    <div class="stat-card">
+                        <div class="stat-info">
+                            <p>Số lượt vắng học</p>
+                            <h3 id="stat-total-absent">0 buổi</h3>
+                        </div>
+                        <div class="stat-icon danger">
+                            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="dashboard-grid">
+                    <div>
+                        <!-- Canvas Academic Distribution Chart -->
+                        <div class="card">
+                            <div class="card-header">
+                                <h3 class="card-title">
+                                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21.21 15.89A10 10 0 1 1 8 2.83"/><path d="M22 12A10 10 0 0 0 12 2v10z"/></svg>
+                                    Phân Bố Xếp Loại Học Lực
+                                </h3>
+                            </div>
+                            <div style="height: 220px; display: flex; align-items: center; justify-content: space-around; position: relative;">
+                                <canvas id="academicChart" width="220" height="220"></canvas>
+                                <div id="chart-legend" style="font-size: 13px; display: flex; flex-direction: column; gap: 8px;"></div>
+                            </div>
+                        </div>
+
+                        <!-- Outstanding Students -->
+                        <div class="card">
+                            <div class="card-header">
+                                <h3 class="card-title">
+                                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+                                    Top Học Sinh Tiêu Biểu (ĐTB Cả Năm)
+                                </h3>
+                            </div>
+                            <div class="table-responsive">
+                                <table class="data-table">
+                                    <thead>
+                                        <tr>
+                                            <th>Họ và Tên</th>
+                                            <th>Mã HS</th>
+                                            <th>ĐTB Cả Năm</th>
+                                            <th>Hạnh Kiểm</th>
+                                            <th>Học Lực</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="top-students-list">
+                                        <!-- Rendered via JS -->
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div>
+                        <!-- Absence Alert Center -->
+                        <div class="card" style="border-top: 4px solid var(--danger-500);">
+                            <div class="card-header">
+                                <h3 class="card-title" style="color: var(--danger-600);">
+                                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
+                                    Cảnh Báo Chuyên Cần & Học Tập
+                                </h3>
+                            </div>
+                            <p style="font-size: 12px; color: var(--text-muted); margin-bottom: 12px;">Cảnh báo tự động dựa theo giới hạn đã thiết lập ở Cài Đặt</p>
+                            <div id="warning-students-list" style="display: flex; flex-direction: column; gap: 10px;">
+                                <!-- Rendered via JS -->
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <section id="students" class="page-section">
+                <div class="table-toolbar">
+                    <div class="toolbar-left">
+                        <div class="search-box">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+                            <input type="text" id="search-student" placeholder="Tìm tên, mã HS, SĐT...">
+                        </div>
+                        <select class="filter-select" id="filter-gender">
+                            <option value="ALL">Tất cả Giới tính</option>
+                            <option value="Nam">Nam</option>
+                            <option value="Nữ">Nữ</option>
+                        </select>
+                        <select class="filter-select" id="filter-conduct">
+                            <option value="ALL">Tất cả Hạnh kiểm</option>
+                            <option value="Tốt">Tốt</option>
+                            <option value="Khá">Khá</option>
+                            <option value="Trung bình">Trung bình</option>
+                            <option value="Yếu">Yếu</option>
+                        </select>
+                    </div>
+
+                    <div class="toolbar-right">
+                        <button class="btn btn-primary" id="btn-open-add-modal">
+                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+                            Thêm Học Sinh
+                        </button>
+                    </div>
+                </div>
+
+                <div class="table-responsive">
+                    <table class="data-table" id="students-table">
+                        <thead>
+                            <tr>
+                                <th class="sortable" data-sort="id">Mã HS ⇕</th>
+                                <th class="sortable" data-sort="name">Họ và Tên ⇕</th>
+                                <th>Ngày Sinh</th>
+                                <th>Giới Tính</th>
+                                <th>SĐT Phụ Huynh</th>
+                                <th>Địa Chỉ</th>
+                                <th>Hạnh Kiểm</th>
+                                <th class="sortable" data-sort="gpa">ĐTB Cả Năm ⇕</th>
+                                <th>Học Lực</th>
+                                <th style="text-align: right;">Thao Tác</th>
+                            </tr>
+                        </thead>
+                        <tbody id="student-table-body">
+                            <!-- Rendered via JS -->
+                        </tbody>
+                    </table>
+                </div>
+            </section>
+
+            <section id="grades" class="page-section">
+                <div class="table-toolbar">
+                    <div class="toolbar-left">
+                        <span style="font-size: 13px; font-weight: 600; color: var(--text-muted);">Giao diện nhập điểm:</span>
+                        <select class="filter-select" id="select-grade-mode">
+                            <option value="EDIT">Bảng Nhập Điểm Thi HK1 & HK2</option>
+                            <option value="SUMMARY">Xem Tổng Hợp ĐTB Cả Năm</option>
+                        </select>
+                    </div>
+                    <div class="toolbar-right">
+                        <button class="btn btn-success" id="btn-save-grades">
+                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"/><polyline points="17 21 17 13 7 13 7 21"/><polyline points="7 3 7 8 15 8"/></svg>
+                            Lưu Tất Cả Điểm & Hạnh Kiểm
+                        </button>
+                    </div>
+                </div>
+
+                <div class="table-responsive">
+                    <table class="data-table">
+                        <thead>
+                            <tr id="grade-table-header">
+                                <!-- Dynamic Headers via JS -->
+                            </tr>
+                        </thead>
+                        <tbody id="grade-table-body">
+                            <!-- Rendered via JS -->
+                        </tbody>
+                    </table>
+                </div>
+            </section>
+
+            <section id="attendance" class="page-section">
+                <div class="card">
+                    <div class="card-header">
+                        <h3 class="card-title">
+                            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/></svg>
+                            Sổ Theo Dõi Nghỉ Học & Cảnh Báo Vi Phạm Chuyên Cần
+                        </h3>
+                        <button class="btn btn-success" id="btn-save-attendance">
+                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"/><polyline points="17 21 17 13 7 13 7 21"/><polyline points="7 3 7 8 15 8"/></svg>
+                            Lưu Sổ Điểm Danh
+                        </button>
+                    </div>
+                    <div class="table-responsive">
+                        <table class="data-table">
+                            <thead>
+                                <tr>
+                                    <th>Mã HS</th>
+                                    <th>Họ và Tên</th>
+                                    <th>Có Phép (Buổi)</th>
+                                    <th>Không Phép (Buổi)</th>
+                                    <th>Tổng Số Buổi Nghỉ</th>
+                                    <th>Ngày Nghỉ Gần Nhất</th>
+                                    <th>Lý Do Nghỉ Chính</th>
+                                    <th>Trạng Thái Cảnh Báo</th>
+                                </tr>
+                            </thead>
+                            <tbody id="attendance-table-body">
+                                <!-- Rendered via JS -->
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </section>
+
+            <section id="reports" class="page-section">
+                <div class="card">
+                    <div class="card-header">
+                        <h3 class="card-title">Báo Cáo Thống Kê & Xuất Dữ Liệu Lớp Học</h3>
+                        <div style="display: flex; gap: 10px;">
+                            <button class="btn btn-secondary" onclick="window.print()">
+                                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 6 2 18 2 18 9"/><path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"/><rect x="6" y="14" width="12" height="8"/></svg>
+                                In Bảng Điểm / Báo Cáo
+                            </button>
+                            <button class="btn btn-success" id="btn-export-csv">
+                                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+                                Xuất File Excel (CSV)
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Print View Banner -->
+                    <div class="print-only-header">
+                        <h2 id="prt-school-name">TRƯỜNG THCS CHÂN TRỜI MỚI</h2>
+                        <h3 id="prt-title">BẢNG TỔNG HỢP ĐIỂM SỐ & NGHỈ HỌC CẢ NĂM</h3>
+                        <p id="prt-subtitle">Năm học: 2026 - 2027 | Lớp: 8A1 | GVCN: ThS. Nguyễn Văn Minh</p>
+                        <hr style="margin: 10px 0 15px 0; border: 0; border-top: 1px solid #000;">
+                    </div>
+
+                    <div id="report-preview-area">
+                        <div class="table-responsive">
+                            <table class="data-table">
+                                <thead>
+                                    <tr>
+                                        <th>STT</th>
+                                        <th>Mã HS</th>
+                                        <th>Họ và Tên</th>
+                                        <th>Điểm Thi HK1</th>
+                                        <th>Điểm Thi HK2</th>
+                                        <th>ĐTB Cả Năm</th>
+                                        <th>Học Lực</th>
+                                        <th>Hạnh Kiểm</th>
+                                        <th>Tổng Nghỉ</th>
+                                        <th>Trạng Thái Chuyên Cần</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="report-table-body">
+                                    <!-- Rendered via JS -->
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <section id="settings" class="page-section">
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px;">
+                    <!-- Form Cấu Hình Lớp & Thang Điểm -->
+                    <div class="card">
+                        <div class="card-header">
+                            <h3 class="card-title">
+                                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
+                                Cấu Hình Thông Tin & Công Thức
+                            </h3>
+                        </div>
+                        <form id="form-settings">
+                            <div class="form-group">
+                                <label>Tên Trường Học</label>
+                                <input type="text" class="form-control" id="cfg-school-name" required>
+                            </div>
+                            <div class="form-group">
+                                <label>Họ và Tên Giáo Viên Chủ Nhiệm</label>
+                                <input type="text" class="form-control" id="cfg-teacher-name" required>
+                            </div>
+                            <div class="form-grid">
+                                <div class="form-group">
+                                    <label>Tên Lớp Chủ Nhiệm</label>
+                                    <input type="text" class="form-control" id="cfg-class-code" required>
+                                </div>
+                                <div class="form-group">
+                                    <label>Năm Học</label>
+                                    <input type="text" class="form-control" id="cfg-school-year" required>
+                                </div>
+                            </div>
+
+                            <hr style="margin: 15px 0; border: 0; border-top: 1px solid var(--border-color);">
+                            <p style="font-size: 13px; font-weight: 700; margin-bottom: 10px; color: var(--brand-600);">Trọng Số Tính ĐTB Cả Năm</p>
+                            
+                            <div class="form-grid">
+                                <div class="form-group">
+                                    <label>Hệ số Điểm HK1</label>
+                                    <input type="number" step="1" min="1" max="5" class="form-control" id="cfg-w-hk1" required>
+                                </div>
+                                <div class="form-group">
+                                    <label>Hệ số Điểm HK2</label>
+                                    <input type="number" step="1" min="1" max="5" class="form-control" id="cfg-w-hk2" required>
+                                </div>
+                            </div>
+
+                            <hr style="margin: 15px 0; border: 0; border-top: 1px solid var(--border-color);">
+                            <p style="font-size: 13px; font-weight: 700; margin-bottom: 10px; color: var(--brand-600);">Thang Điểm Xếp Loại Học Lực (Mức Tối Thiểu)</p>
+
+                            <div class="form-grid">
+                                <div class="form-group">
+                                    <label>ĐTB Giỏi (≥)</label>
+                                    <input type="number" step="0.1" class="form-control" id="cfg-rank-gioi" required>
+                                </div>
+                                <div class="form-group">
+                                    <label>ĐTB Khá (≥)</label>
+                                    <input type="number" step="0.1" class="form-control" id="cfg-rank-kha" required>
+                                </div>
+                                <div class="form-group">
+                                    <label>ĐTB Trung Bình (≥)</label>
+                                    <input type="number" step="0.1" class="form-control" id="cfg-rank-tb" required>
+                                </div>
+                            </div>
+
+                            <hr style="margin: 15px 0; border: 0; border-top: 1px solid var(--border-color);">
+                            <p style="font-size: 13px; font-weight: 700; margin-bottom: 10px; color: var(--danger-600);">Ngưỡng Cảnh Báo Nghỉ Học (Số Buổi)</p>
+
+                            <div class="form-grid">
+                                <div class="form-group">
+                                    <label>Lưu Ý (>)</label>
+                                    <input type="number" class="form-control" id="cfg-absent-notice" required>
+                                </div>
+                                <div class="form-group">
+                                    <label>Cảnh Báo (>)</label>
+                                    <input type="number" class="form-control" id="cfg-absent-warn" required>
+                                </div>
+                                <div class="form-group full">
+                                    <label>Vi Phạm / Nguy Cơ Cấm Thi (>)</label>
+                                    <input type="number" class="form-control" id="cfg-absent-ban" required>
+                                </div>
+                            </div>
+
+                            <button type="submit" class="btn btn-primary" style="width: 100%; justify-content: center; margin-top: 10px;">Lưu Thay Đổi Cấu Hình</button>
+                        </form>
+                    </div>
+
+                    <!-- Quản Lý Dữ Liệu Hệ Thống -->
+                    <div class="card">
+                        <div class="card-header">
+                            <h3 class="card-title">
+                                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
+                                Quản Lý Dữ Liệu Hệ Thống (Storage & Backup)
+                            </h3>
+                        </div>
+
+                        <div style="display: flex; flex-direction: column; gap: 16px;">
+                            <div style="padding: 16px; border: 1px solid var(--border-color); border-radius: var(--radius-md); background: #f8fafc;">
+                                <h4 style="font-size: 13.5px; font-weight: 700; margin-bottom: 6px;">Sao Lưu Dữ Liệu (Backup JSON)</h4>
+                                <p style="font-size: 12px; color: var(--text-muted); margin-bottom: 12px;">Tải về file JSON chứa toàn bộ dữ liệu học sinh, điểm số và cấu hình hiện tại để lưu trữ an toàn.</p>
+                                <button class="btn btn-primary" id="btn-backup-json">
+                                    <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+                                    Tải File Backup (.JSON)
+                                </button>
+                            </div>
+
+                            <div style="padding: 16px; border: 1px solid var(--border-color); border-radius: var(--radius-md); background: #f8fafc;">
+                                <h4 style="font-size: 13.5px; font-weight: 700; margin-bottom: 6px;">Phục Hồi Dữ Liệu (Restore JSON)</h4>
+                                <p style="font-size: 12px; color: var(--text-muted); margin-bottom: 12px;">Chọn file sao lưu dạng .JSON từ máy tính của bạn để khôi phục dữ liệu đã lưu trước đây.</p>
+                                <input type="file" id="file-restore-json" accept=".json" style="display: none;">
+                                <button class="btn btn-secondary" id="btn-trigger-restore">
+                                    <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
+                                    Chọn File Restore JSON
+                                </button>
+                            </div>
+
+                            <div style="padding: 16px; border: 1px dashed var(--warning-500); border-radius: var(--radius-md); background: var(--warning-100);">
+                                <h4 style="font-size: 13.5px; font-weight: 700; color: var(--warning-600); margin-bottom: 6px;">Tải Lại Dữ Liệu Mẫu Lớp 8A1</h4>
+                                <p style="font-size: 12px; color: #92400e; margin-bottom: 12px;">Nạp lại danh sách mẫu 12 học sinh ví dụ hoàn chỉnh ban đầu của THCS Chân Trời Mới.</p>
+                                <button class="btn btn-warning" id="btn-load-sample">Tải Dữ Liệu Mẫu</button>
+                            </div>
+
+                            <div style="padding: 16px; border: 1px dashed var(--danger-500); border-radius: var(--radius-md); background: var(--danger-100);">
+                                <h4 style="font-size: 13.5px; font-weight: 700; color: var(--danger-600); margin-bottom: 6px;">Xóa Trắng Dữ Liệu (Reset All)</h4>
+                                <p style="font-size: 12px; color: #991b1b; margin-bottom: 12px;">Cảnh báo: Hành động này sẽ xóa toàn bộ danh sách học sinh và điểm số trong bộ nhớ trình duyệt!</p>
+                                <button class="btn btn-danger" id="btn-reset-all">Xóa Toàn Bộ Dữ Liệu</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+        </main>
+    </div>
+
+    <div class="modal-overlay" id="student-modal">
+        <div class="modal-container">
+            <div class="modal-header">
+                <h3 id="modal-title">Thêm Học Sinh Mới</h3>
+                <button class="modal-close" id="btn-close-modal">&times;</button>
+            </div>
+            <form id="student-form">
+                <div class="modal-body">
+                    <input type="hidden" id="student-edit-id">
+                    <div class="form-grid">
+                        <div class="form-group">
+                            <label>Mã Học Sinh *</label>
+                            <input type="text" id="input-id" class="form-control" placeholder="HS801" required>
+                        </div>
+                        <div class="form-group">
+                            <label>Họ và Tên *</label>
+                            <input type="text" id="input-name" class="form-control" placeholder="Nguyễn Văn A" required>
+                        </div>
+                    </div>
+                    <div class="form-grid">
+                        <div class="form-group">
+                            <label>Ngày Sinh *</label>
+                            <input type="date" id="input-dob" class="form-control" required>
+                        </div>
+                        <div class="form-group">
+                            <label>Giới Tính *</label>
+                            <select id="input-gender" class="form-control">
+                                <option value="Nam">Nam</option>
+                                <option value="Nữ">Nữ</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="form-grid">
+                        <div class="form-group">
+                            <label>Hạnh Kiểm *</label>
+                            <select id="input-conduct" class="form-control">
+                                <option value="Tốt">Tốt</option>
+                                <option value="Khá">Khá</option>
+                                <option value="Trung bình">Trung bình</option>
+                                <option value="Yếu">Yếu</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label>SĐT Phụ Huynh *</label>
+                            <input type="text" id="input-phone" class="form-control" placeholder="0912345678" required>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label>Địa Chỉ Thường Trú</label>
+                        <input type="text" id="input-address" class="form-control" placeholder="Số 123, Đường Nguyễn Trãi, Quận 1">
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" id="btn-cancel-modal">Hủy</button>
+                    <button type="submit" class="btn btn-primary">Lưu Học Sinh</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Container Toast Notifications -->
+    <div class="toast-container" id="toast-container"></div>
+
+    <script>
+        const DEFAULT_SETTINGS = {
+            schoolName: "Trường THCS Chân Trời Mới",
+            teacherName: "ThS. Nguyễn Văn Minh",
+            classCode: "8A1",
+            schoolYear: "2026 - 2027",
+            weightHk1: 1,
+            weightHk2: 2,
+            rankGioi: 8.0,
+            rankKha: 6.5,
+            rankTb: 5.0,
+            absentNotice: 3,
+            absentWarn: 8,
+            absentBan: 15
+        };
+
+        const INITIAL_STUDENTS = [
+            { id: "HS8001", name: "Nguyễn Văn An", dob: "2012-04-12", gender: "Nam", phone: "0912345678", address: "12 Lê Lợi, Phường 4", conduct: "Tốt", scoreHk1: 8.5, scoreHk2: 9.0, absentEx: 1, absentUnex: 0, lastAbsentDate: "2026-09-15", absentReason: "Bị sốt cảm cúm" },
+            { id: "HS8002", name: "Trần Thị Bích", dob: "2012-08-25", gender: "Nữ", phone: "0923456789", address: "45 Trần Hưng Đạo", conduct: "Tốt", scoreHk1: 9.2, scoreHk2: 9.6, absentEx: 0, absentUnex: 0, lastAbsentDate: "", absentReason: "" },
+            { id: "HS8003", name: "Lê Hoàng Cường", dob: "2012-01-15", gender: "Nam", phone: "0934567890", address: "78 Nguyễn Thị Minh Khai", conduct: "Khá", scoreHk1: 6.8, scoreHk2: 7.2, absentEx: 2, absentUnex: 2, lastAbsentDate: "2026-10-02", absentReason: "Xe hỏng / Việc gia đình" },
+            { id: "HS8004", name: "Phạm Minh Dung", dob: "2012-11-02", gender: "Nữ", phone: "0945678901", address: "102 Điện Biên Phủ", conduct: "Tốt", scoreHk1: 8.0, scoreHk2: 8.4, absentEx: 1, absentUnex: 0, lastAbsentDate: "2026-09-20", absentReason: "Khám sức khỏe định kỳ" },
+            { id: "HS8005", name: "Đỗ Đức Em", dob: "2012-05-30", gender: "Nam", phone: "0956789012", address: "55 Hai Bà Trưng", conduct: "Trung bình", scoreHk1: 4.8, scoreHk2: 5.2, absentEx: 4, absentUnex: 5, lastAbsentDate: "2026-10-05", absentReason: "Nghỉ tự do không phép" },
+            { id: "HS8006", name: "Vũ Thị Giang", dob: "2012-09-18", gender: "Nữ", phone: "0967890123", address: "89 Lý Tự Trọng", conduct: "Yếu", scoreHk1: 3.5, scoreHk2: 4.0, absentEx: 6, absentUnex: 10, lastAbsentDate: "2026-10-08", absentReason: "Bỏ học đi chơi" },
+            { id: "HS8007", name: "Hoàng Văn Hải", dob: "2012-03-08", gender: "Nam", phone: "0978901234", address: "23 Nam Kỳ Khởi Nghĩa", conduct: "Khá", scoreHk1: 7.5, scoreHk2: 7.8, absentEx: 0, absentUnex: 0, lastAbsentDate: "", absentReason: "" },
+            { id: "HS8008", name: "Ngô Khánh Linh", dob: "2012-12-12", gender: "Nữ", phone: "0989012345", address: "67 Cách Mạng Tháng 8", conduct: "Tốt", scoreHk1: 9.5, scoreHk2: 9.8, absentEx: 0, absentUnex: 0, lastAbsentDate: "", absentReason: "" },
+            { id: "HS8009", name: "Đặng Minh Nam", dob: "2012-07-22", gender: "Nam", phone: "0990123456", address: "34 Võ Văn Tần", conduct: "Tốt", scoreHk1: 8.2, scoreHk2: 8.6, absentEx: 1, absentUnex: 0, lastAbsentDate: "2026-09-10", absentReason: "Về quê thăm ông bà" },
+            { id: "HS8010", name: "Bùi Tuyết Oanh", dob: "2012-02-14", gender: "Nữ", phone: "0901234567", address: "12 Pasteur", conduct: "Khá", scoreHk1: 6.5, scoreHk2: 6.8, absentEx: 3, absentUnex: 1, lastAbsentDate: "2026-09-28", absentReason: "Bị cảm sốt" },
+            { id: "HS8011", name: "Dương Quốc Phong", dob: "2012-06-05", gender: "Nam", phone: "0912345670", address: "90 Đinh Tiên Hoàng", conduct: "Trung bình", scoreHk1: 5.2, scoreHk2: 5.6, absentEx: 2, absentUnex: 3, lastAbsentDate: "2026-10-01", absentReason: "Gia đình bận việc" },
+            { id: "HS8012", name: "Lý Thị Quỳnh", dob: "2012-10-30", gender: "Nữ", phone: "0923456781", address: "15 Nguyễn Trãi", conduct: "Tốt", scoreHk1: 8.8, scoreHk2: 9.1, absentEx: 0, absentUnex: 0, lastAbsentDate: "", absentReason: "" }
+        ];
+
+        class StudentManager {
+            constructor() {
+                this.students = [];
+                this.settings = { ...DEFAULT_SETTINGS };
+                this.sortColumn = "id";
+                this.sortDirection = "asc";
+
+                this.init();
+            }
+
+            init() {
+                this.loadStorage();
+                this.bindNavigation();
+                this.bindEvents();
+                this.renderAllPages();
+            }
+
+            saveStorage() {
+                localStorage.setItem('school_students', JSON.stringify(this.students));
+                localStorage.setItem('school_settings', JSON.stringify(this.settings));
+            }
+
+            loadStorage() {
+                const storedStudents = localStorage.getItem('school_students');
+                const storedSettings = localStorage.getItem('school_settings');
+
+                if (storedStudents) {
+                    this.students = JSON.parse(storedStudents);
+                } else {
+                    this.students = JSON.parse(JSON.stringify(INITIAL_STUDENTS));
+                    this.saveStorage();
+                }
+
+                if (storedSettings) {
+                    this.settings = { ...DEFAULT_SETTINGS, ...JSON.parse(storedSettings) };
+                }
+            }
+
+            calculateAnnualGPA(student) {
+                const w1 = parseFloat(this.settings.weightHk1) || 1;
+                const w2 = parseFloat(this.settings.weightHk2) || 2;
+                const hk1 = parseFloat(student.scoreHk1) || 0;
+                const hk2 = parseFloat(student.scoreHk2) || 0;
+
+                const annual = ((hk1 * w1) + (hk2 * w2)) / (w1 + w2);
+                return parseFloat(annual.toFixed(1));
+            }
+
+            getAcademicRank(gpa) {
+                if (gpa >= this.settings.rankGioi) return "Giỏi";
+                if (gpa >= this.settings.rankKha) return "Khá";
+                if (gpa >= this.settings.rankTb) return "Trung bình";
+                return "Yếu";
+            }
+
+            getAttendanceStatus(student) {
+                const total = (student.absentEx || 0) + (student.absentUnex || 0);
+                if (total > this.settings.absentBan) return { text: "Nguy cơ Cấm thi", badge: "badge-banned" };
+                if (total > this.settings.absentWarn) return { text: "Cảnh báo", badge: "badge-warn" };
+                if (total > this.settings.absentNotice) return { text: "Cần lưu ý", badge: "badge-notice" };
+                return { text: "An toàn", badge: "badge-safe" };
+            }
+
+            bindNavigation() {
+                const menuItems = document.querySelectorAll('.menu-item');
+                menuItems.forEach(item => {
+                    item.addEventListener('click', () => {
+                        menuItems.forEach(i => i.classList.remove('active'));
+                        item.classList.add('active');
+
+                        const target = item.getAttribute('data-target');
+                        document.querySelectorAll('.page-section').forEach(p => p.classList.remove('active'));
+                        document.getElementById(target).classList.add('active');
+
+                        const titles = {
+                            dashboard: "Tổng quan Lớp học",
+                            students: "Danh sách Học sinh",
+                            grades: "Nhập Điểm & Hạnh Kiểm",
+                            attendance: "Điểm danh & Nghỉ học",
+                            reports: "Báo cáo & Thống kê",
+                            settings: "Cài đặt Lớp học"
+                        };
+                        document.getElementById('page-title').textContent = titles[target] || "Quản Lý";
+                        this.renderAllPages();
+                    });
+                });
+            }
+
+            bindEvents() {
+                // Search & Filters
+                document.getElementById('search-student').addEventListener('input', () => this.renderStudentsTable());
+                document.getElementById('filter-gender').addEventListener('change', () => this.renderStudentsTable());
+                document.getElementById('filter-conduct').addEventListener('change', () => this.renderStudentsTable());
+
+                // Table Header Sort
+                document.querySelectorAll('#students-table th.sortable').forEach(th => {
+                    th.addEventListener('click', () => {
+                        const col = th.getAttribute('data-sort');
+                        if (this.sortColumn === col) {
+                            this.sortDirection = this.sortDirection === 'asc' ? 'desc' : 'asc';
+                        } else {
+                            this.sortColumn = col;
+                            this.sortDirection = 'asc';
+                        }
+                        this.renderStudentsTable();
+                    });
+                });
+
+                // Modal Add/Edit
+                document.getElementById('btn-open-add-modal').addEventListener('click', () => this.openStudentModal());
+                document.getElementById('btn-close-modal').addEventListener('click', () => this.closeStudentModal());
+                document.getElementById('btn-cancel-modal').addEventListener('click', () => this.closeStudentModal());
+
+                // Student Form Submit
+                document.getElementById('student-form').addEventListener('submit', (e) => {
+                    e.preventDefault();
+                    this.saveStudentFromModal();
+                });
+
+                // Grade Mode Select
+                document.getElementById('select-grade-mode').addEventListener('change', () => this.renderGradeSheet());
+
+                // Save Grades Button
+                document.getElementById('btn-save-grades').addEventListener('click', () => {
+                    this.saveStorage();
+                    this.showToast("Đã lưu bảng điểm và hạnh kiểm thành công!");
+                    this.renderAllPages();
+                });
+
+                // Save Attendance Button
+                document.getElementById('btn-save-attendance').addEventListener('click', () => {
+                    this.saveStorage();
+                    this.showToast("Đã lưu sổ điểm danh & nghỉ học!");
+                    this.renderAllPages();
+                });
+
+                // Settings Form Submit
+                document.getElementById('form-settings').addEventListener('submit', (e) => {
+                    e.preventDefault();
+                    this.settings.schoolName = document.getElementById('cfg-school-name').value.trim();
+                    this.settings.teacherName = document.getElementById('cfg-teacher-name').value.trim();
+                    this.settings.classCode = document.getElementById('cfg-class-code').value.trim();
+                    this.settings.schoolYear = document.getElementById('cfg-school-year').value.trim();
+                    this.settings.weightHk1 = parseFloat(document.getElementById('cfg-w-hk1').value) || 1;
+                    this.settings.weightHk2 = parseFloat(document.getElementById('cfg-w-hk2').value) || 2;
+                    this.settings.rankGioi = parseFloat(document.getElementById('cfg-rank-gioi').value) || 8.0;
+                    this.settings.rankKha = parseFloat(document.getElementById('cfg-rank-kha').value) || 6.5;
+                    this.settings.rankTb = parseFloat(document.getElementById('cfg-rank-tb').value) || 5.0;
+                    this.settings.absentNotice = parseInt(document.getElementById('cfg-absent-notice').value) || 3;
+                    this.settings.absentWarn = parseInt(document.getElementById('cfg-absent-warn').value) || 8;
+                    this.settings.absentBan = parseInt(document.getElementById('cfg-absent-ban').value) || 15;
+
+                    this.saveStorage();
+                    this.showToast("Đã lưu cài đặt cấu hình hệ thống!");
+                    this.renderAllPages();
+                });
+
+                // Data Backup & Restore Events
+                document.getElementById('btn-backup-json').addEventListener('click', () => this.backupJSON());
+                document.getElementById('btn-trigger-restore').addEventListener('click', () => document.getElementById('file-restore-json').click());
+                document.getElementById('file-restore-json').addEventListener('change', (e) => this.restoreJSON(e));
+                
+                document.getElementById('btn-load-sample').addEventListener('click', () => {
+                    if (confirm("Bạn có chắc chắn muốn nạp lại dữ liệu mẫu 12 học sinh? Dữ liệu hiện tại sẽ bị ghi đè.")) {
+                        this.students = JSON.parse(JSON.stringify(INITIAL_STUDENTS));
+                        this.saveStorage();
+                        this.renderAllPages();
+                        this.showToast("Đã tải lại dữ liệu mẫu thành công!");
+                    }
+                });
+
+                document.getElementById('btn-reset-all').addEventListener('click', () => {
+                    if (confirm("CẢNH BÁO: Bạn có thực sự muốn xóa toàn bộ danh sách học sinh?")) {
+                        this.students = [];
+                        this.saveStorage();
+                        this.renderAllPages();
+                        this.showToast("Đã xóa toàn bộ dữ liệu học sinh.");
+                    }
+                });
+
+                // Export CSV Event
+                document.getElementById('btn-export-csv').addEventListener('click', () => this.exportCSV());
+            }
+
+            updateHeaderAndSettingsInputs() {
+                // Top Header and Sidebar UI updates
+                document.getElementById('sb-school-name').textContent = this.settings.schoolName;
+                document.getElementById('sb-teacher-name').textContent = this.settings.teacherName;
+                document.getElementById('sb-class-code').textContent = `GVCN Lớp ${this.settings.classCode}`;
+                
+                const initials = this.settings.teacherName.split(' ').map(n => n[0]).join('').slice(-2).toUpperCase() || "GV";
+                document.getElementById('sb-teacher-avatar').textContent = initials;
+
+                document.getElementById('hdr-class-info').textContent = `Lớp ${this.settings.classCode} (${this.settings.schoolYear})`;
+                
+                // Print Header Update
+                document.getElementById('prt-school-name').textContent = this.settings.schoolName.toUpperCase();
+                document.getElementById('prt-subtitle').textContent = `Năm học: ${this.settings.schoolYear} | Lớp: ${this.settings.classCode} | GVCN: ${this.settings.teacherName}`;
+
+                // Form Settings Inputs
+                document.getElementById('cfg-school-name').value = this.settings.schoolName;
+                document.getElementById('cfg-teacher-name').value = this.settings.teacherName;
+                document.getElementById('cfg-class-code').value = this.settings.classCode;
+                document.getElementById('cfg-school-year').value = this.settings.schoolYear;
+                document.getElementById('cfg-w-hk1').value = this.settings.weightHk1;
+                document.getElementById('cfg-w-hk2').value = this.settings.weightHk2;
+                document.getElementById('cfg-rank-gioi').value = this.settings.rankGioi;
+                document.getElementById('cfg-rank-kha').value = this.settings.rankKha;
+                document.getElementById('cfg-rank-tb').value = this.settings.rankTb;
+                document.getElementById('cfg-absent-notice').value = this.settings.absentNotice;
+                document.getElementById('cfg-absent-warn').value = this.settings.absentWarn;
+                document.getElementById('cfg-absent-ban').value = this.settings.absentBan;
+            }
+
+            renderAllPages() {
+                this.updateHeaderAndSettingsInputs();
+                this.renderDashboard();
+                this.renderStudentsTable();
+                this.renderGradeSheet();
+                this.renderAttendanceTable();
+                this.renderReportTable();
+            }
+
+            renderDashboard() {
+                const total = this.students.length;
+                document.getElementById('stat-total-students').textContent = total;
+
+                // Avg Class Score
+                const totalGPA = this.students.reduce((sum, s) => sum + this.calculateAnnualGPA(s), 0);
+                const avgClassGPA = total > 0 ? (totalGPA / total).toFixed(1) : "0.0";
+                document.getElementById('stat-avg-score').textContent = avgClassGPA;
+
+                // Good Conduct Ratio
+                const goodConductCount = this.students.filter(s => s.conduct === 'Tốt' || s.conduct === 'Khá').length;
+                const conductPercent = total > 0 ? Math.round((goodConductCount / total) * 100) : 0;
+                document.getElementById('stat-good-conduct').textContent = `${conductPercent}%`;
+
+                // Total Absences
+                const totalAbsent = this.students.reduce((sum, s) => sum + (s.absentEx || 0) + (s.absentUnex || 0), 0);
+                document.getElementById('stat-total-absent').textContent = `${totalAbsent} buổi`;
+
+                // Top Students
+                const sortedTop = [...this.students].sort((a, b) => this.calculateAnnualGPA(b) - this.calculateAnnualGPA(a)).slice(0, 5);
+                const topBody = document.getElementById('top-students-list');
+                topBody.innerHTML = sortedTop.map(s => {
+                    const gpa = this.calculateAnnualGPA(s);
+                    const rank = this.getAcademicRank(gpa);
+                    return `
+                        <tr>
+                            <td style="font-weight: 600;">${s.name}</td>
+                            <td><code>${s.id}</code></td>
+                            <td><span class="score-box score-good">${gpa}</span></td>
+                            <td><span class="badge badge-${this.getConductClass(s.conduct)}">${s.conduct}</span></td>
+                            <td><span class="badge badge-${this.getRankClass(rank)}">${rank}</span></td>
+                        </tr>
+                    `;
+                }).join('');
+
+                // Warnings List
+                const warningList = document.getElementById('warning-students-list');
+                const warnings = this.students.filter(s => {
+                    const totalAb = (s.absentEx || 0) + (s.absentUnex || 0);
+                    return totalAb > this.settings.absentNotice || this.calculateAnnualGPA(s) < this.settings.rankTb;
+                });
+
+                if (warnings.length === 0) {
+                    warningList.innerHTML = `<p style="font-size: 13px; color: var(--success-600); font-weight: 500;">✓ Không có học sinh bị cảnh báo!</p>`;
+                } else {
+                    warningList.innerHTML = warnings.map(s => {
+                        const totalAb = (s.absentEx || 0) + (s.absentUnex || 0);
+                        const status = this.getAttendanceStatus(s);
+                        const gpa = this.calculateAnnualGPA(s);
+                        return `
+                            <div style="padding: 10px 12px; background-color: var(--danger-100); border-radius: var(--radius-md); font-size: 12px; display: flex; justify-content: space-between; align-items: center;">
+                                <div>
+                                    <strong style="color: var(--danger-600);">${s.name} (${s.id})</strong>
+                                    <div style="color: var(--text-muted); font-size: 11px; margin-top: 2px;">
+                                        ${totalAb > this.settings.absentNotice ? `• Nghỉ ${totalAb} buổi ` : ''}
+                                        ${gpa < this.settings.rankTb ? `• ĐTB Yếu (${gpa})` : ''}
+                                    </div>
+                                </div>
+                                <span class="badge ${status.badge}">${status.text}</span>
+                            </div>
+                        `;
+                    }).join('');
+                }
+
+                this.renderAcademicChart();
+            }
+
+            renderAcademicChart() {
+                const canvas = document.getElementById('academicChart');
+                if (!canvas) return;
+                const ctx = canvas.getContext('2d');
+                ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+                const counts = { "Giỏi": 0, "Khá": 0, "Trung bình": 0, "Yếu": 0 };
+                this.students.forEach(s => {
+                    const rank = this.getAcademicRank(this.calculateAnnualGPA(s));
+                    counts[rank] = (counts[rank] || 0) + 1;
+                });
+
+                const colors = { "Giỏi": "#16a34a", "Khá": "#4f46e5", "Trung bình": "#f59e0b", "Yếu": "#ef4444" };
+                const total = this.students.length || 1;
+                let startAngle = 0;
+                const centerX = 110;
+                const centerY = 110;
+                const radius = 80;
+
+                Object.keys(counts).forEach(key => {
+                    const sliceAngle = (counts[key] / total) * 2 * Math.PI;
+                    if (sliceAngle > 0) {
+                        ctx.beginPath();
+                        ctx.moveTo(centerX, centerY);
+                        ctx.arc(centerX, centerY, radius, startAngle, startAngle + sliceAngle);
+                        ctx.fillStyle = colors[key];
+                        ctx.fill();
+                        startAngle += sliceAngle;
+                    }
+                });
+
+                const legendContainer = document.getElementById('chart-legend');
+                legendContainer.innerHTML = Object.keys(counts).map(key => `
+                    <div style="display: flex; align-items: center; gap: 8px;">
+                        <span style="width: 12px; height: 12px; border-radius: 3px; background-color: ${colors[key]};"></span>
+                        <span><b>${key}</b>: ${counts[key]} HS (${Math.round((counts[key]/total)*100)}%)</span>
+                    </div>
+                `).join('');
+            }
+
+            renderStudentsTable() {
+                const search = document.getElementById('search-student').value.toLowerCase();
+                const gender = document.getElementById('filter-gender').value;
+                const conduct = document.getElementById('filter-conduct').value;
+
+                let filtered = this.students.filter(s => {
+                    const matchSearch = s.name.toLowerCase().includes(search) || s.id.toLowerCase().includes(search) || (s.phone && s.phone.includes(search));
+                    const matchGender = gender === 'ALL' || s.gender === gender;
+                    const matchConduct = conduct === 'ALL' || s.conduct === conduct;
+                    return matchSearch && matchGender && matchConduct;
+                });
+
+                filtered.sort((a, b) => {
+                    let valA = a[this.sortColumn];
+                    let valB = b[this.sortColumn];
+
+                    if (this.sortColumn === 'gpa') {
+                        valA = this.calculateAnnualGPA(a);
+                        valB = this.calculateAnnualGPA(b);
+                    }
+
+                    if (valA < valB) return this.sortDirection === 'asc' ? -1 : 1;
+                    if (valA > valB) return this.sortDirection === 'asc' ? 1 : -1;
+                    return 0;
+                });
+
+                const tbody = document.getElementById('student-table-body');
+                tbody.innerHTML = filtered.map(s => {
+                    const gpa = this.calculateAnnualGPA(s);
+                    const rank = this.getAcademicRank(gpa);
+                    return `
+                        <tr>
+                            <td><code>${s.id}</code></td>
+                            <td style="font-weight: 600;">${s.name}</td>
+                            <td>${this.formatDate(s.dob)}</td>
+                            <td>${s.gender}</td>
+                            <td>${s.phone || '---'}</td>
+                            <td>${s.address || '---'}</td>
+                            <td><span class="badge badge-${this.getConductClass(s.conduct)}">${s.conduct}</span></td>
+                            <td><span class="score-box ${gpa >= this.settings.rankGioi ? 'score-good' : (gpa >= this.settings.rankTb ? 'score-avg' : 'score-bad')}">${gpa}</span></td>
+                            <td><span class="badge badge-${this.getRankClass(rank)}">${rank}</span></td>
+                            <td style="text-align: right;">
+                                <div class="action-btns" style="justify-content: flex-end;">
+                                    <button class="btn-icon" onclick="app.editStudent('${s.id}')" title="Chỉnh Sửa"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg></button>
+                                    <button class="btn-icon delete" onclick="app.deleteStudent('${s.id}')" title="Xóa"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/></svg></button>
+                                </div>
+                            </td>
+                        </tr>
+                    `;
+                }).join('');
+            }
+
+            renderGradeSheet() {
+                const mode = document.getElementById('select-grade-mode').value;
+                const header = document.getElementById('grade-table-header');
+                const tbody = document.getElementById('grade-table-body');
+
+                if (mode === 'EDIT') {
+                    header.innerHTML = `
+                        <th>Mã HS</th>
+                        <th>Họ và Tên</th>
+                        <th style="text-align:center">Điểm Thi HK1</th>
+                        <th style="text-align:center">Điểm Thi HK2</th>
+                        <th style="text-align:center">ĐTB Cả Năm (${this.settings.weightHk1}:${this.settings.weightHk2})</th>
+                        <th style="text-align:center">Hạnh Kiểm</th>
+                        <th style="text-align:center">Học Lực Cả Năm</th>
+                    `;
+
+                    tbody.innerHTML = this.students.map(s => {
+                        const gpa = this.calculateAnnualGPA(s);
+                        const rank = this.getAcademicRank(gpa);
+                        return `
+                            <tr>
+                                <td><code>${s.id}</code></td>
+                                <td style="font-weight: 600;">${s.name}</td>
+                                <td style="text-align:center">
+                                    <input type="number" step="0.1" min="0" max="10" class="grade-input" value="${s.scoreHk1}" onchange="app.updateScore('${s.id}', 'scoreHk1', this.value)">
+                                </td>
+                                <td style="text-align:center">
+                                    <input type="number" step="0.1" min="0" max="10" class="grade-input" value="${s.scoreHk2}" onchange="app.updateScore('${s.id}', 'scoreHk2', this.value)">
+                                </td>
+                                <td style="text-align:center"><span class="score-box ${gpa >= this.settings.rankGioi ? 'score-good' : (gpa >= this.settings.rankTb ? 'score-avg' : 'score-bad')}">${gpa}</span></td>
+                                <td style="text-align:center">
+                                    <select class="filter-select" style="padding: 4px 8px;" onchange="app.updateConduct('${s.id}', this.value)">
+                                        <option value="Tốt" ${s.conduct === 'Tốt' ? 'selected' : ''}>Tốt</option>
+                                        <option value="Khá" ${s.conduct === 'Khá' ? 'selected' : ''}>Khá</option>
+                                        <option value="Trung bình" ${s.conduct === 'Trung bình' ? 'selected' : ''}>Trung bình</option>
+                                        <option value="Yếu" ${s.conduct === 'Yếu' ? 'selected' : ''}>Yếu</option>
+                                    </select>
+                                </td>
+                                <td style="text-align:center"><span class="badge badge-${this.getRankClass(rank)}">${rank}</span></td>
+                            </tr>
+                        `;
+                    }).join('');
+                } else {
+                    header.innerHTML = `
+                        <th>Mã HS</th>
+                        <th>Họ và Tên</th>
+                        <th style="text-align:center">Điểm Thi HK1</th>
+                        <th style="text-align:center">Điểm Thi HK2</th>
+                        <th style="text-align:center">ĐTB Cả Năm</th>
+                        <th style="text-align:center">Học Lực Cả Năm</th>
+                        <th style="text-align:center">Hạnh Kiểm</th>
+                    `;
+
+                    tbody.innerHTML = this.students.map(s => {
+                        const gpa = this.calculateAnnualGPA(s);
+                        const rank = this.getAcademicRank(gpa);
+                        return `
+                            <tr>
+                                <td><code>${s.id}</code></td>
+                                <td style="font-weight: 600;">${s.name}</td>
+                                <td style="text-align:center">${s.scoreHk1}</td>
+                                <td style="text-align:center">${s.scoreHk2}</td>
+                                <td style="text-align:center"><span class="score-box ${gpa >= this.settings.rankGioi ? 'score-good' : 'score-avg'}">${gpa}</span></td>
+                                <td style="text-align:center"><span class="badge badge-${this.getRankClass(rank)}">${rank}</span></td>
+                                <td style="text-align:center"><span class="badge badge-${this.getConductClass(s.conduct)}">${s.conduct}</span></td>
+                            </tr>
+                        `;
+                    }).join('');
+                }
+            }
+
+            updateScore(id, field, val) {
+                const s = this.students.find(x => x.id === id);
+                if (s) {
+                    s[field] = parseFloat(val) || 0;
+                    this.renderGradeSheet();
+                }
+            }
+
+            updateConduct(id, val) {
+                const s = this.students.find(x => x.id === id);
+                if (s) {
+                    s.conduct = val;
+                }
+            }
+
+            renderAttendanceTable() {
+                const tbody = document.getElementById('attendance-table-body');
+                tbody.innerHTML = this.students.map(s => {
+                    const total = (s.absentEx || 0) + (s.absentUnex || 0);
+                    const status = this.getAttendanceStatus(s);
+                    return `
+                        <tr>
+                            <td><code>${s.id}</code></td>
+                            <td style="font-weight: 600;">${s.name}</td>
+                            <td><input type="number" min="0" class="grade-input" value="${s.absentEx || 0}" onchange="app.updateAttendance('${s.id}', 'absentEx', this.value)"></td>
+                            <td><input type="number" min="0" class="grade-input" value="${s.absentUnex || 0}" onchange="app.updateAttendance('${s.id}', 'absentUnex', this.value)"></td>
+                            <td style="font-weight: 700;">${total} buổi</td>
+                            <td><input type="date" class="form-control" style="padding: 4px 6px; font-size: 12px;" value="${s.lastAbsentDate || ''}" onchange="app.updateAttendance('${s.id}', 'lastAbsentDate', this.value)"></td>
+                            <td><input type="text" class="form-control" style="padding: 4px 6px; font-size: 12px;" value="${s.absentReason || ''}" placeholder="Lý do nghỉ..." onchange="app.updateAttendance('${s.id}', 'absentReason', this.value)"></td>
+                            <td><span class="badge ${status.badge}">${status.text}</span></td>
+                        </tr>
+                    `;
+                }).join('');
+            }
+
+            updateAttendance(id, field, val) {
+                const s = this.students.find(x => x.id === id);
+                if (s) {
+                    if (field === 'absentEx' || field === 'absentUnex') {
+                        s[field] = parseInt(val) || 0;
+                    } else {
+                        s[field] = val;
+                    }
+                    this.renderAttendanceTable();
+                }
+            }
+
+            renderReportTable() {
+                const tbody = document.getElementById('report-table-body');
+                tbody.innerHTML = this.students.map((s, idx) => {
+                    const gpa = this.calculateAnnualGPA(s);
+                    const rank = this.getAcademicRank(gpa);
+                    const totalAb = (s.absentEx || 0) + (s.absentUnex || 0);
+                    const status = this.getAttendanceStatus(s);
+                    return `
+                        <tr>
+                            <td>${idx + 1}</td>
+                            <td><code>${s.id}</code></td>
+                            <td style="font-weight: 600;">${s.name}</td>
+                            <td>${s.scoreHk1}</td>
+                            <td>${s.scoreHk2}</td>
+                            <td><b>${gpa}</b></td>
+                            <td><span class="badge badge-${this.getRankClass(rank)}">${rank}</span></td>
+                            <td><span class="badge badge-${this.getConductClass(s.conduct)}">${s.conduct}</span></td>
+                            <td>${totalAb} buổi</td>
+                            <td><span class="badge ${status.badge}">${status.text}</span></td>
+                        </tr>
+                    `;
+                }).join('');
+            }
+
+            openStudentModal(student = null) {
+                const modal = document.getElementById('student-modal');
+                const title = document.getElementById('modal-title');
+                
+                if (student) {
+                    title.textContent = "Chỉnh Sửa Thông Tin Học Sinh";
+                    document.getElementById('student-edit-id').value = student.id;
+                    document.getElementById('input-id').value = student.id;
+                    document.getElementById('input-id').disabled = true;
+                    document.getElementById('input-name').value = student.name;
+                    document.getElementById('input-dob').value = student.dob;
+                    document.getElementById('input-gender').value = student.gender;
+                    document.getElementById('input-conduct').value = student.conduct;
+                    document.getElementById('input-phone').value = student.phone || '';
+                    document.getElementById('input-address').value = student.address || '';
+                } else {
+                    title.textContent = "Thêm Học Sinh Mới";
+                    document.getElementById('student-form').reset();
+                    document.getElementById('student-edit-id').value = '';
+                    document.getElementById('input-id').disabled = false;
+                    document.getElementById('input-id').value = `HS80${this.students.length + 1}`;
+                }
+                modal.classList.add('active');
+            }
+
+            closeStudentModal() {
+                document.getElementById('student-modal').classList.remove('active');
+            }
+
+            saveStudentFromModal() {
+                const editId = document.getElementById('student-edit-id').value;
+                const id = document.getElementById('input-id').value.trim();
+                const name = document.getElementById('input-name').value.trim();
+                const dob = document.getElementById('input-dob').value;
+                const gender = document.getElementById('input-gender').value;
+                const conduct = document.getElementById('input-conduct').value;
+                const phone = document.getElementById('input-phone').value.trim();
+                const address = document.getElementById('input-address').value.trim();
+
+                if (!id || !name || !dob) {
+                    this.showToast("Vui lòng nhập đầy đủ thông tin bắt buộc!");
+                    return;
+                }
+
+                if (editId) {
+                    const student = this.students.find(s => s.id === editId);
+                    if (student) {
+                        student.name = name;
+                        student.dob = dob;
+                        student.gender = gender;
+                        student.conduct = conduct;
+                        student.phone = phone;
+                        student.address = address;
+                        this.showToast("Cập nhật học sinh thành công!");
+                    }
+                } else {
+                    if (this.students.some(s => s.id === id)) {
+                        alert("Mã học sinh này đã tồn tại!");
+                        return;
+                    }
+                    this.students.push({
+                        id, name, dob, gender, conduct, phone, address,
+                        scoreHk1: 7.0, scoreHk2: 7.0,
+                        absentEx: 0, absentUnex: 0, lastAbsentDate: "", absentReason: ""
+                    });
+                    this.showToast("Thêm học sinh mới thành công!");
+                }
+
+                this.saveStorage();
+                this.closeStudentModal();
+                this.renderAllPages();
+            }
+
+            editStudent(id) {
+                const student = this.students.find(s => s.id === id);
+                if (student) this.openStudentModal(student);
+            }
+
+            deleteStudent(id) {
+                if (confirm(`Bạn có chắc chắn muốn xóa học sinh có mã ${id}?`)) {
+                    this.students = this.students.filter(s => s.id !== id);
+                    this.saveStorage();
+                    this.renderAllPages();
+                    this.showToast("Đã xóa học sinh khỏi hệ thống!");
+                }
+            }
+
+            // Backup JSON File
+            backupJSON() {
+                const data = {
+                    settings: this.settings,
+                    students: this.students,
+                    exportDate: new Date().toISOString()
+                };
+                const jsonStr = JSON.stringify(data, null, 2);
+                const blob = new Blob([jsonStr], { type: 'application/json' });
+                const url = URL.createObjectURL(blob);
+                const a = document.createElement('a');
+                a.href = url;
+                a.download = `Backup_SoDiem_${this.settings.classCode}_${new Date().toISOString().slice(0,10)}.json`;
+                a.click();
+                URL.revokeObjectURL(url);
+                this.showToast("Đã tải xuống file sao lưu Backup JSON!");
+            }
+
+            // Restore JSON File
+            restoreJSON(e) {
+                const file = e.target.files[0];
+                if (!file) return;
+
+                const reader = new FileReader();
+                reader.onload = (event) => {
+                    try {
+                        const parsed = JSON.parse(event.target.result);
+                        if (parsed.students && Array.isArray(parsed.students)) {
+                            this.students = parsed.students;
+                            if (parsed.settings) this.settings = { ...DEFAULT_SETTINGS, ...parsed.settings };
+                            this.saveStorage();
+                            this.renderAllPages();
+                            this.showToast("Phục hồi dữ liệu từ file JSON thành công!");
+                        } else {
+                            alert("Cấu trúc file JSON không hợp lệ!");
+                        }
+                    } catch (err) {
+                        alert("Lỗi đọc file JSON: " + err.message);
+                    }
+                };
+                reader.readAsText(file);
+            }
+
+            // Export CSV (Excel format UTF-8 BOM)
+            exportCSV() {
+                const headers = ["STT,Mã HS,Họ và Tên,Ngày Sinh,Giới Tính,SĐT,Hạnh Kiểm,Điểm HK1,Điểm HK2,ĐTB Cả Năm,Học Lực,Tổng Nghỉ,Trạng Thái Chuyên Cần"];
+                const rows = this.students.map((s, idx) => {
+                    const gpa = this.calculateAnnualGPA(s);
+                    const rank = this.getAcademicRank(gpa);
+                    const totalAb = (s.absentEx || 0) + (s.absentUnex || 0);
+                    const status = this.getAttendanceStatus(s).text;
+                    return `"${idx+1}","${s.id}","${s.name}","${s.dob}","${s.gender}","${s.phone || ''}","${s.conduct}",${s.scoreHk1},${s.scoreHk2},${gpa},"${rank}",${totalAb},"${status}"`;
+                });
+
+                const csvContent = "\uFEFF" + [headers, ...rows].join("\n");
+                const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
+                const url = URL.createObjectURL(blob);
+                const a = document.createElement('a');
+                a.href = url;
+                a.download = `Bang_Diem_${this.settings.classCode}_${new Date().toISOString().slice(0,10)}.csv`;
+                a.click();
+                URL.revokeObjectURL(url);
+                this.showToast("Đã xuất file CSV thành công!");
+            }
+
+            // Helpers
+            getConductClass(conduct) {
+                switch(conduct) {
+                    case 'Tốt': return 'tot';
+                    case 'Khá': return 'kha';
+                    case 'Trung bình': return 'tb';
+                    default: return 'yeu';
+                }
+            }
+
+            getRankClass(rank) {
+                switch(rank) {
+                    case 'Giỏi': return 'tot';
+                    case 'Khá': return 'kha';
+                    case 'Trung bình': return 'tb';
+                    default: return 'yeu';
+                }
+            }
+
+            formatDate(str) {
+                if (!str) return '';
+                const parts = str.split('-');
+                if (parts.length === 3) return `${parts[2]}/${parts[1]}/${parts[0]}`;
+                return str;
+            }
+
+            showToast(message) {
+                const container = document.getElementById('toast-container');
+                const toast = document.createElement('div');
+                toast.className = 'toast';
+                toast.innerHTML = `
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#22c55e" stroke-width="2"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
+                    <span>${message}</span>
+                `;
+                container.appendChild(toast);
+                setTimeout(() => { toast.remove(); }, 3000);
+            }
+        }
+
+        // Initialize application on DOM ready
+        let app;
+        window.addEventListener('DOMContentLoaded', () => {
+            app = new StudentManager();
+        });
+    </script>
+</body>
+</html>
